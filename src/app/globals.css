@@ -71,7 +71,6 @@ body {
   );
   pointer-events: none;
   z-index: 2;
-  animation: crt-flicker 3s infinite;
 }
 
 /* Title Bar & Content */
@@ -119,10 +118,36 @@ body {
     0 0 8px #ffaa00;
 }
 
-/* Slow Flicker */
-@keyframes crt-flicker {
-  0%, 100% { opacity: 1; }
-  5%, 20% { opacity: 0.97; }
+/* 更真实的 CRT 偶发微闪 */
+.crt-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  animation: crt-flash 5s infinite;
+}
+
+@keyframes crt-flash {
+  /* 大部分时间都透明 */
+  0%, 65%, 90%, 100% { opacity: 0; }
+
+  /* 第一波：超短瞬闪 */
+  66%  { opacity: 0.01; }
+  66.5%{ opacity: 0; }
+
+  /* 第二波：更亮一点 */
+  72%  { opacity: 0.02; }
+  72.3%{ opacity: 0; }
+
+  /* 第三波：低强度长一点 */
+  80%  { opacity: 0.03; }
+  82%  { opacity: 0; }
+
+  /* 第四波：几乎肉眼难察微弱 */
+  88%  { opacity: 0.01; }
+  89%  { opacity: 0; }
 }
 
 /* Text Jitter */

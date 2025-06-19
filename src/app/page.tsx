@@ -19,7 +19,7 @@ export default function Home() {
             <br/>Created by y0semite 
           </div>
           {/* 按钮组：左右分布 */}
-        <div className="flex justify-between w-2/3 max-w-lg">
+        <div className="flex justify-between w-2/3 max-w-lg px-20">
           {/* 退出 按钮 */}
           <button
             onClick={() => window.close()}

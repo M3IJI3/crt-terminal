@@ -14,11 +14,10 @@ export default function CRTWindow({ title, children }: CRTWindowProps) {
         <>
             
             <div className="crt-window">
+                <div className="crt-flash" />
                 <div className="crt-scan"></div>
-                <div className="crt-titlebar" onClick={() => router.push('/')}>
-                    <span className="crt-title">{title}</span>
-                </div>
-                <div className="crt-content text-glow">
+                <div className="crt-titlebar" />
+                <div className="crt-content text-glow flex flex-col">
                     {children}
                 </div>
             </div>
