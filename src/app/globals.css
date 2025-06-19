@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  font-family: 'Courier', Courier, monospace;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -22,5 +26,152 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Courier', Courier, monospace;
 }
+
+/* —— 以下是 CRT 整体样式 —— */
+/* Global CRT Window Styles */
+.crt-window {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at center, #21170e 0%, #0f0c07 100%);
+  border-bottom: 3px solid rgba(255, 170, 0, 0.7);
+  border-left: 3px solid rgba(255, 170, 0, 0.7);
+  border-right: 3px solid rgba(255, 170, 0, 0.7);
+  box-shadow:
+    0 0 20px rgba(255,170,85,0.5),
+    inset 0 0 60px rgba(255,170,85,0.3);
+  overflow: hidden;
+  /* CRT Darkened Corners & Center Glow */
+}
+.crt-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(255,204,102,0.04) 0%, transparent 40%),
+    radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Scanlines */
+.crt-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255,204,102,0.06) 0px,
+    rgba(255,204,102,0.06) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: crt-flicker 3s infinite;
+}
+
+/* Title Bar & Content */
+.crt-titlebar {
+  flex: none;
+  height: 1.5rem;
+  position: relative;
+  background: rgba(255, 170, 0, 0.7); /* 半透明琥珀光 */
+  box-shadow:
+    inset 0 -1px 4px rgba(255, 204, 102, 0.5), /* 内部泛光 */
+    0 0 8px rgba(255, 170, 0, 0.4); /* 外部发光 */
+  backdrop-filter: blur(4px); /* 透光模糊 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 3;
+  filter: drop-shadow(1px 0 rgba(255,0,0,0.2)) drop-shadow(-1px 0 rgba(0,255,255,0.2)); /* 色散偏色 */
+}
+.crt-titlebar .crt-title {
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 1rem;
+  color: transparent;
+  background: inherit;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+.crt-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  position: relative;
+  z-index: 4;
+  animation: crt-jitter 4s infinite;
+}
+
+/* Text Glow */
+.text-glow {
+  color: #f1c16f;
+  text-shadow:
+    0 0 1px #f1c16f,
+    0 0 2px #ffaa00,
+    0 0 4px #ffaa00,
+    0 0 8px #ffaa00;
+}
+
+/* Slow Flicker */
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  5%, 20% { opacity: 0.97; }
+}
+
+/* Text Jitter */
+@keyframes crt-jitter {
+  0%, 90%, 100% { transform: translateX(0); }
+  92% { transform: translateX(1px); }
+  95% { transform: translateX(0); }
+}
+.crt-content .whitespace-pre-wrap {
+  display: block;
+  
+}
+
+/* Scan Beam */
+.crt-window .crt-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,220,100,0) 0%,
+    rgba(255,220,100,0.02) 50%,
+    rgba(255,220,100,0.04) 100%
+  );
+  mix-blend-mode: screen;
+  filter: blur(1px);
+  animation: crt-scan 5s ease-in-out infinite;
+  z-index: 5;
+}
+@keyframes crt-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(950%); }
+}
+
+/* CRT 磷光拖尾：无DOM，仅靠 text-shadow */
+.trail-typing {
+  /* 主文字色 */
+  color: #f1c16f;
+  /* 第一道阴影：最清晰，紧跟光标一格 */
+  text-shadow:
+    -1ch 0 1px rgba(241,193,111,0.3),
+    /* 第二道：更远更模糊 */
+    -2ch 0 2px rgba(241,193,111,0.2),
+    /* 第三道：最远最淡 */
+    -3ch 0 3px rgba(241,193,111,0.1);
+}
+
+/* CRT 整体样式 */
+
