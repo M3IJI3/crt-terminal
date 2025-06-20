@@ -28,7 +28,7 @@ export default function TerminalConsole() {
   // 打开文件：拉原始流，包成 Blob URL 或文本存 state
   async function openFile(path: string) {
     const res = await fetch(`/api/fs${path}?raw=1`)
-    if (!res.ok) throw new Error(`open: 无法访问 ${path}`)
+    if (!res.ok) throw new Error(`open: fail to access ${path}`)
     const blob = await res.blob()
     const mime = blob.type || 'application/octet-stream'
     // 文本走 text(), 其他生成 URL
@@ -101,7 +101,7 @@ export default function TerminalConsole() {
       }
       case 'open': {
         const file = parts[1]
-        if (!file) return 'open: 缺少文件名'
+        if (!file) return 'open: missing file operand'
         const path = cwd === '/' ? `/${file}` : `${cwd}/${file}`
         try {
           await openFile(path)
