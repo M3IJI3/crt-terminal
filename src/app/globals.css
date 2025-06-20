@@ -44,8 +44,8 @@ body {
     0 0 20px rgba(255,170,85,0.5),
     inset 0 0 60px rgba(255,170,85,0.3);
   overflow: hidden;
-  /* CRT Darkened Corners & Center Glow */
 }
+
 .crt-window::before {
   content: "";
   position: absolute;
@@ -167,13 +167,13 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 10%;
+  height: 20%;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgba(255,220,100,0) 0%,
     rgba(255,220,100,0.02) 50%,
-    rgba(255,220,100,0.04) 100%
+    rgba(255,220,100,0.03) 100%
   );
   mix-blend-mode: screen;
   filter: blur(1px);
@@ -182,7 +182,7 @@ body {
 }
 @keyframes crt-scan {
   0% { transform: translateY(-100%); }
-  100% { transform: translateY(950%); }
+  100% { transform: translateY(450%); }
 }
 
 /* CRT 磷光拖尾：无DOM，仅靠 text-shadow */
@@ -191,12 +191,91 @@ body {
   color: #f1c16f;
   /* 第一道阴影：最清晰，紧跟光标一格 */
   text-shadow:
-    -1ch 0 1px rgba(241,193,111,0.3),
+    -1ch 0 1px rgba(241,193,111,0.1),
     /* 第二道：更远更模糊 */
-    -2ch 0 2px rgba(241,193,111,0.2),
+    -2ch 0 2px rgba(241,193,111,0.05),
     /* 第三道：最远最淡 */
-    -3ch 0 3px rgba(241,193,111,0.1);
+    -3ch 0 3px rgba(241,193,111,0.01);
 }
 
 /* CRT 整体样式 */
+
+/* 遮罩层半透明，看得见后面 */
+.subwindow-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);    /* 原来 0.75 -> 0.5 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* 主窗口：背景半透明、双边框发光 */
+.subwindow {
+  width: 75vw;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(33, 23, 14, 0.7);   /* #21170e + alpha=0.9，更透明 */
+  border-left: 2px solid rgba(255, 170, 0, 0.7);
+  border-right:2px solid rgba(255, 170, 0, 0.7);
+  border-bottom:2px solid rgba(255, 170, 0, 0.7);
+  /* 内部发光阴影 + 外部发光 */
+  box-shadow:
+    inset 0 0 10px rgba(255,170,0,0.3),   /* 内部弱荧光 */
+    0 0 8px rgba(255,170,0,0.4);           /* 外部弱荧光 */
+  font-family: 'Courier', monospace;
+  color: rgba(255, 170, 0, 0.8);
+}
+
+/* 标题栏：下边框也带荧光 */
+.subwindow__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(15, 12, 7, 0.85);     /* #0f0c07 + alpha */
+  border-top: 1px solid rgba(255,170,0,0.7);
+  border-bottom: 1px solid rgba(255,170,0,0.7);  /* 内部弱荧光 */
+  box-shadow: inset 0 -2px 6px rgba(255,170,0,0.3); /* 标题栏内部发光 */
+  cursor: move;
+}
+
+.subwindow__header .title {
+  font-size: 1rem;
+  color: rgba(255,170,0,0.9);
+  text-shadow: 0 0 3px rgba(255,170,0,0.5);
+}
+
+.subwindow__header .close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: rgba(255,170,0,0.9);
+  text-shadow: 0 0 3px rgba(255,170,0,0.5);
+  cursor: pointer;
+}
+
+/* 内容区：滚动溢出 */
+.subwindow__body {
+  flex: 1;
+  overflow-y: auto;   /* 只在垂直方向滚 */
+  overflow-x: hidden;
+  padding: 1rem;
+  background: transparent;
+  color: rgba(255,170,0,0.8);
+  text-shadow: 0 0 1px rgba(255,170,0,0.4);
+}
+
+/* 资源全铺满但保留比例 */
+.subwindow__body img,
+.subwindow__body iframe,
+.subwindow__body video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
 

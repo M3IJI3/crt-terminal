@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import DonutAsciiPure from "@/components/ascii-donut";
 import CRTWindow from "@/components/crt-window";
-import TerminalConsole from "@/components/terminal-console";
 
 export default function Home() {
   const router = useRouter()
@@ -37,7 +36,7 @@ export default function Home() {
 
           {/* 进入 按钮 */}
           <button
-            onClick={() => window.location.href = '/next'}  // 或者 router.push('/next')
+            onClick={() => router.push('/main')}  // 或者 router.push('/next')
             className="
               px-3 py-1
               text-glow
