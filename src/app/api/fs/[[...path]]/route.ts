@@ -9,10 +9,8 @@ function inside(full: string) {
   return !rel.startsWith('..') && !path.isAbsolute(rel)
 }
 
-export async function GET(
-  request: NextRequest,            // ← 要用 NextRequest 才能拿到 nextUrl
-  { params }: { params: { path?: string[] } }
-) {
+export async function GET(request: NextRequest,            // ← 要用 NextRequest 才能拿到 nextUrl
+{ params }: any) {
   const rel = (params.path || []).join('/')
   const full = path.join(DATA_ROOT, rel)
   if (!inside(full)) return new NextResponse('Access denied', { status: 403 })
