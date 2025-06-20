@@ -116,16 +116,25 @@ export default function TerminalConsole() {
   }
 
   const handleKeyDown = async (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      const cmdLine = input.trim()
-      if (!cmdLine) return
-      const out: string[] = []
-      out.push(`${prompt()} ${cmdLine}`)
-      const result = await run(cmdLine)
-      if (result !== null) out.push(result)
-      setLines(prev => [...prev, ...out])
-      setInput('')
-    }
+    if (e.key !== 'Enter') return
+
+  const cmdLine = input.trim()
+  if (!cmdLine) return
+
+  // === 特殊处理 clear ===
+  if (cmdLine === 'clear') {
+    setLines([])      // 直接清空
+    setInput('')      // 清空输入框
+    return            // 跳过后续 push 逻辑
+  }
+
+  // === 其它命令走原逻辑 ===
+  const out: string[] = []
+  out.push(`${prompt()} ${cmdLine}`)
+  const result = await run(cmdLine)
+  if (result !== null) out.push(result)
+  setLines(prev => [...prev, ...out])
+  setInput('')
   }
 
   return (
